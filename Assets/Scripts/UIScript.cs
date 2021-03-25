@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TapticPlugin;
 
 public class UIScript : MonoBehaviour
 {
@@ -58,6 +59,8 @@ public class UIScript : MonoBehaviour
 
     public void NextButton()
     {
+        if (PlayerPrefs.GetInt("onOrOffVibration") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
         PlayerPrefs.SetInt("LevelIndex", PlayerPrefs.GetInt("LevelIndex") + 1);
         if (PlayerPrefs.GetInt("LevelIndex") > 10)
         {
@@ -70,6 +73,8 @@ public class UIScript : MonoBehaviour
     }
     public void RestartButton()
     {
+        if (PlayerPrefs.GetInt("onOrOffVibration") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

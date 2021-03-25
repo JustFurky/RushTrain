@@ -22,10 +22,12 @@ public class enemyScript : MonoBehaviour
     public bool TriggerOn = false;
     Vector3 EndRotate = new Vector3(0, 0, 0);
 
+    Coroutine TrenNumerator;
     public Transform[] TargetX;
 
     void Start()
     {
+
         randomRunSpeed = Random.Range(2.5f, 6f);
         rb = transform.GetComponent<Rigidbody>();
         if (Metrout)
@@ -33,7 +35,7 @@ public class enemyScript : MonoBehaviour
             transform.GetComponent<Outline>().enabled = false;
             int Current = Random.Range(0, 1);
             Transform currentxPos = TargetX[Current];
-            StartCoroutine(MetroOut(currentxPos));
+            TrenNumerator = StartCoroutine(MetroOut(currentxPos));
         }
         else
         {
@@ -57,7 +59,12 @@ public class enemyScript : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag=="RGEnemy")
+        if (other.tag == "Player" && TrenNumerator != null)
+        {
+            DOTween.Pause(transform);
+            StopCoroutine(TrenNumerator);
+        }
+        if (other.gameObject.tag == "RGEnemy")
         {
             gameObject.tag = "Run";
             transform.GetComponent<Animator>().SetTrigger("FallAnim");
@@ -74,7 +81,7 @@ public class enemyScript : MonoBehaviour
         {
             if (other.transform.position.x == transform.position.x + (transform.localScale.x / 3))
             {
-              StartCoroutine(ObstacleTimer());
+                StartCoroutine(ObstacleTimer());
             }
         }
     }

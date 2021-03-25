@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using TapticPlugin;
 
 public class CharacterScript : MonoBehaviour
 {
@@ -59,8 +60,10 @@ public class CharacterScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy"&&Elindebirivar==false)
+        if (other.tag == "Enemy" && Elindebirivar == false)
         {
+            if (PlayerPrefs.GetInt("onOrOffVibration") == 1)
+                TapticManager.Impact(ImpactFeedback.Light);
             //otherobject
             other.gameObject.tag = "RGEnemy";
             other.transform.GetComponent<Outline>().enabled = false;
@@ -91,6 +94,8 @@ public class CharacterScript : MonoBehaviour
         }
         if (other.gameObject.tag == "Finish")
         {
+            if (PlayerPrefs.GetInt("onOrOffVibration") == 1)
+                TapticManager.Impact(ImpactFeedback.Light);
             Camera.transform.GetComponent<SmoothCamera>().enabled = false;
             if (finalBool)
             {
@@ -123,7 +128,7 @@ public class CharacterScript : MonoBehaviour
     {
         if (RotateTime)
         {
-            transform.Rotate(0,-10,0);
+            transform.Rotate(0, -10, 0);
         }
         if (trainGoTime)
         {
@@ -133,17 +138,19 @@ public class CharacterScript : MonoBehaviour
         {
             rb.velocity = new Vector3(0, 0, MovSpeed);
         }
-        if (Input.GetMouseButtonUp(0)&&IsStopTouch)
+        if (Input.GetMouseButtonUp(0) && IsStopTouch)
         {
+            if (PlayerPrefs.GetInt("onOrOffVibration") == 1)
+                TapticManager.Impact(ImpactFeedback.Light);
             Time.timeScale = 1;
             transform.GetComponent<Animator>().SetTrigger("ReleaseEnemy");
             OtherObject.transform.parent = null;
             OtherObject.transform.GetComponent<BoxCollider>().enabled = true;
             OtherObject.transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            OtherObject.transform.GetComponent<Rigidbody>().AddForce(transform.forward*100,ForceMode.Impulse);
+            OtherObject.transform.GetComponent<Rigidbody>().AddForce(transform.forward * 100, ForceMode.Impulse);
             IsStopTouch = false;
             RotateTime = false;
-            transform.rotation=Quaternion.identity;
+            transform.rotation = Quaternion.identity;
             IsStart = true;
             rb.detectCollisions = true;
             MyJoystick.gameObject.SetActive(true);
@@ -155,27 +162,25 @@ public class CharacterScript : MonoBehaviour
             }
         }
 
-       else if (IsStart&&IsStopTouch==false)
-       {
+        if (IsStart && IsStopTouch == false)
+        {
 #if UNITY_EDITOR
-          if (Input.GetMouseButton(0))
-          {//hareket kısmı
-               translation = new Vector3(Input.GetAxis("Mouse X"), 0, 0) * Time.deltaTime * HorizontalSpeed;
-               transform.Translate(translation, Space.World);
-               transform.localPosition = new Vector3(Mathf.Clamp(transform.localPosition.x, SolSinir.transform.position.x, SagSinir.transform.position.x), transform.localPosition.y, transform.localPosition.z);
-          }
+            if (Input.GetMouseButton(0))
+            {//hareket kısmı
+                translation = new Vector3(Input.GetAxis("Mouse X"), 0, 0) * Time.deltaTime * HorizontalSpeed;
+                transform.Translate(translation, Space.World);
+                transform.localPosition = new Vector3(Mathf.Clamp(transform.localPosition.x, SolSinir.transform.position.x, SagSinir.transform.position.x), transform.localPosition.y, transform.localPosition.z);
+            }
 #elif UNITY_IOS || UNITY_ANDROID
            if (Input.touchCount > 0)
            {
                touch = Input.GetTouch(0);
                if (touch.phase == TouchPhase.Moved)
                {
-                   IsStopTouch = true;
                    transform.localPosition = new Vector3(Mathf.Clamp(transform.localPosition.x + touch.deltaPosition.x * 0.01f, SolSinir.transform.position.x, SagSinir.transform.position.x), transform.localPosition.y, transform.localPosition.z);
                }
-               else if (touch.phase == TouchPhase.Began&&IsStopTouch)
+               else if (touch.phase == TouchPhase.Began)
                {
-                   IsStopTouch = true;
                    //save began touch 2d point
                    FirstPressPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
                }
@@ -186,6 +191,8 @@ public class CharacterScript : MonoBehaviour
 
     IEnumerator ObstacleTimer()
     {
+        if (PlayerPrefs.GetInt("onOrOffVibration") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
         IsStart = false;
         transform.GetComponent<Animator>().SetTrigger("FallBack");
         rb.velocity = Vector3.zero;
@@ -210,6 +217,7 @@ public class CharacterScript : MonoBehaviour
     }
     IEnumerator Failed()
     {
+        transform.GetComponent<Animator>().SetTrigger("ReleaseEnemy");
         transform.GetComponent<Animator>().SetTrigger("NoShoulder");
         IsStart = false;
         Trains.GetComponent<Animator>().SetTrigger("Finish");
