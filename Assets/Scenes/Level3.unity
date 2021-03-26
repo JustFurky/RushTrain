@@ -42213,7 +42213,7 @@ PrefabInstance:
     - target: {fileID: 1173780041349862523, guid: d981b8878c83e4ce685413ee0ac00fcb,
         type: 3}
       propertyPath: maxKoltuk
-      value: 5
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 1173780041349862523, guid: d981b8878c83e4ce685413ee0ac00fcb,
         type: 3}
