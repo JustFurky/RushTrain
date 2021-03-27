@@ -128,7 +128,7 @@ public class CharacterScript : MonoBehaviour
     {
         if (RotateTime)
         {
-            transform.Rotate(0, -10, 0);
+            transform.Rotate(0, -5, 0);
         }
         if (trainGoTime)
         {
