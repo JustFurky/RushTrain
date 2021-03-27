@@ -46,11 +46,15 @@ public class CharacterScript : MonoBehaviour
     GameObject OtherObject;
     bool Elindebirivar = false;
     Vector2 FirstPressPos;
+    public bool tutoLevel = false;
     void Start()
     {
         Vector3 TrainInPos = new Vector3(TrainInsıde.transform.position.x, transform.position.y, TrainInsıde.transform.position.z);
         rb = transform.GetComponent<Rigidbody>();
-        Invoke("StartRunFunc", 2f);
+        if (tutoLevel==false)
+        {
+            Invoke("StartRunFunc", 2f);
+        }
     }
     public void StartRunFunc()
     {
@@ -159,6 +163,11 @@ public class CharacterScript : MonoBehaviour
             if (Canvas.transform.GetComponent<UIScript>().Tutorial.activeSelf)
             {
                 Canvas.transform.GetComponent<UIScript>().Tutorial.SetActive(false);
+            }
+            if (tutoLevel==true)
+            {
+                StartRunFunc();
+                tutoLevel = false;
             }
         }
 

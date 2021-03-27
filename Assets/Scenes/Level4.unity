@@ -106257,6 +106257,11 @@ PrefabInstance:
       propertyPath: HorizontalSpeed
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1173780041349862523, guid: d981b8878c83e4ce685413ee0ac00fcb,
+        type: 3}
+      propertyPath: tutoLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2006516221838581004, guid: d981b8878c83e4ce685413ee0ac00fcb,
         type: 3}
       propertyPath: m_RootOrder
